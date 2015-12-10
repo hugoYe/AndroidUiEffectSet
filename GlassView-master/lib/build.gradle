@@ -1,0 +1,42 @@
+apply plugin: 'android-library'
+apply plugin: 'maven'
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "22.0.1"
+
+    defaultConfig {
+        minSdkVersion 8
+        targetSdkVersion 21
+        renderscriptTargetApi 21
+        renderscriptSupportModeEnabled true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+def repositoryUrl
+if (has('repoDir')) {
+    repositoryUrl = "file://$repoDir/mvn-repo/"
+} else {
+    repositoryUrl = "file://$buildDir/mvn-repo/"
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: repositoryUrl)
+            pom.version = '0.1.0'
+            pom.groupId = 'com.ms.square'
+            pom.artifactId = 'glassview'
+        }
+    }
+}
